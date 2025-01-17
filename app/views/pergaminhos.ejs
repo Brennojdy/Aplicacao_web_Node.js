@@ -1,0 +1,68 @@
+<div id="pergaminhos">					
+	<h3>Pergaminhos</h3>
+	<script>
+		
+	</script>
+	<ul>
+		
+		<% for(var i=0; i < acoes.length; i++) { %>
+			<% 
+				var txt_acao = '' 
+				
+				switch(parseInt(acoes[i].acao)){
+					case 1: txt_acao = 'aldeão(ões) coletando recursos'; break;
+					case 2: txt_acao = 'enforcamento(s) programado'; break;
+					case 3: txt_acao = 'aldeão(ões) em treinamento de história'; break;
+					case 4: txt_acao = 'aldeão(ões) em treinamento de magia'; break;
+				}
+
+				var date = new Date();
+                var tempo_atual = date.getTime();
+                var segundos = ((acoes[i].termina_em - tempo_atual) / (1000)).toFixed(0)
+				
+				%>
+				<!-- //cronometro
+					var tempo_horas =  Math.floor(segundos / 3600)
+					var tempo_minutos = Math.floor((segundos % 3600) / 60)
+					var tempo_segundos = Math.floor(segundos % 60) 
+					
+					interval = setInterval(function(){
+
+						tempo_segundos--
+
+						tempo_formatado = `${tempo_horas} hora(s), ${tempo_minutos} minuto(s) e ${tempo_segundos} segundo(s)`				
+
+						if (tempo_segundos == 0 && tempo_minutos == 0 && tempo_horas == 0){
+							clearInterval(interval)
+						}
+
+						if(tempo_segundos <= 0){
+							if (tempo_minutos > 0){
+								tempo_minutos--
+								segundos_restantes = 60
+								
+							}else if (tempo_minutos <= 0){                         
+								if( tempo_horas > 0){
+									tempo_horas--
+									tempo_minutos = 60
+								}       
+						};
+					} ;
+				}, 
+				1010) -->
+				
+			
+			
+			<li>
+				<%= acoes[i].quantidade%>  <%= txt_acao %>
+				<!-- <span id="cronometro"></span> -->
+				- <small>
+					<!-- <span id="segundos" style="display: none;"> <%= segundos %>  </span>  -->
+					<span class="tempo_restante"><%= segundos%></span> segundos restantes				
+				- <a href="/revogar_acao?id_acao=<%=acoes[i]._id%>">revogar ordem</a></small>
+			</li>
+
+		<% } %>
+
+	</ul>
+</div> 

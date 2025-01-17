@@ -1,0 +1,215 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+	<head>
+		<meta charset="UTF-8">
+
+		<title>MMORPG - Game of Thrones</title>
+		
+		<!-- JQuery -->
+		<script src="js/jquery-2.2.1.js"></script>
+
+		<script>
+			$(document).ready(function(){
+
+				document.getElementById('btn_sair').addEventListener('click', () => {
+					window.location.href = '/sair'
+				});
+
+				$("#btn_suditos").click(function(){
+					$('#msg').hide();
+
+					$.ajax({
+						url: '/suditos',
+						method: 'get',
+						success: function(data){
+							$('#acoes').html(data)
+						}
+					});
+				});
+
+				$("#btn_pergaminho").click(function(){
+					$('#msg').hide();
+
+					$.ajax({
+						url: '/pergaminhos',
+						method: 'get',
+						success: function(data){
+							$('#acoes').html(data);
+							clearInterval(timerID)
+							cronometro()
+						}
+					});
+				
+					});
+
+			})
+
+			var timerID = null
+
+			function cronometro(){
+
+				$('.tempo_restante').each(function(){
+					var segundos = $(this).html();				
+					var segundos_atuais = parseInt(segundos) - 1
+
+					if(segundos_atuais < 0){
+						window.location.href = '/jogo?msg=C'
+					} else{
+						$(this).html(segundos_atuais)
+					}
+
+					
+				});
+				timerID = setTimeout('cronometro()', 1000)
+			}
+
+			
+			// 	var interval = null
+
+			// 	function cronometro(){					
+			// 	var segundos = $('#segundos').html()
+			// 	segundos = parseInt(segundos)
+			
+			// 	var tempo_horas_span = document.getElementById('horas_restantes')
+			// 	var tempo_minutos_span = document.getElementById('minutos_restantes')
+			// 	var tempo_segundos_span = document.getElementById('segundos_restantes')
+			// 	var cronometro_msg = document.getElementById('cronometro')
+
+			// 	var tempo_horas =  Math.floor(segundos / 3600)
+			// 	var tempo_minutos = Math.floor((segundos % 3600) / 60)
+			// 	var tempo_segundos = Math.floor(segundos % 60)
+
+			// 	interval = setInterval(() => {
+			// 		if (tempo_segundos == 0 && tempo_minutos == 0 && tempo_horas == 0){
+			// 			cronometro_msg.innerHTML = '- Tarefa concluida!' 					
+			// 			clearInterval(interval);
+			// 		}
+					
+			// 		tempo_segundos--
+
+			// 		tempo_horas_span.innerHTML = parseInt(tempo_horas)
+			// 		tempo_minutos_span.innerHTML = parseInt(tempo_minutos)
+			// 		tempo_segundos_span.innerHTML = parseInt(tempo_segundos)
+
+			// 		if(tempo_segundos <= 0){
+			// 				if (tempo_minutos > 0){
+			// 					tempo_minutos--
+			// 					tempo_segundos = 59
+								
+			// 				}else if (tempo_minutos <= 0){                         
+			// 					if( tempo_horas > 0){
+			// 						tempo_horas--
+			// 						tempo_minutos = 59
+			// 					}       
+			// 			} 			  
+			// 		}
+					
+			// 	}, 1000);
+			// };
+			
+						// tempo_formatado = `${tempo_horas} hora(s), ${tempo_minutos} minuto(s) e ${tempo_segundos} segundo(s)`	
+				
+		
+		</script>
+
+		<!-- bootstrap - link cdn -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	
+		<!-- incluindo css -->
+		<link href="css/style.css" rel="stylesheet">
+
+	</head>
+
+	<body class="body-jogo">
+
+		<nav class="navbar navbar-default navbar-static-top">
+			<div class="container">
+				<div class="form-group sair">
+					<button type="button" class="btn btn-info pull-right" id="btn_sair">Sair</button>
+				</div>
+			</div>
+		</nav>
+
+	    <div class="container">			
+			<% if(msg == 'A') { %>
+				<div class="alert alert-danger" id="msg">
+					<strong>Operação inválida. Verifique se todos os campos foram informados!</strong>	
+				</div>
+			<% } else if (msg == 'B') { %>
+				<div class="alert alert-info" id="msg">
+					<strong>Ação realizada com sucesso!</strong>	
+				</div>
+			<% } else if (msg == 'C'){ %>
+				<div class="alert alert-success" id="msg">
+					<strong>Senhor, a atividade ordenada foi concluida!</strong>	
+				</div>
+
+				else if (msg == 'D'){ %>
+					<div class="alert alert-primary" id="msg">
+						<strong>Senhor, sua ordem foi revogada!</strong>	
+					</div>
+			<% } %>
+
+			<div class="row">
+	    		<div class="col-sm-3 casa">
+					<img src="images/casa_<%=img_casa%>.jpg" />
+				</div>
+
+	    		<div class="col-sm-9">
+					<div class="row barra-superior">
+						<div class="col-sm-2"> 
+							<img src="images/habilidades/temor.jpg" title="Temor" alt="Temor" />
+							<span><%=jogo.temor%></span>
+						</div>
+						
+						<div class="col-sm-2"> 
+							<img src="images/habilidades/sabedoria.jpg" title="Sabedoria" alt="Sabedoria"/>
+							<span><%=jogo.sabedoria%></span>
+						</div>
+						
+						<div class="col-sm-2"> 
+							<img src="images/habilidades/comercio.jpg" title="Comércio" alt="Comércio"/>
+							<span><%=jogo.comercio%></span>
+						</div>
+						
+						<div class="col-sm-2"> 
+							<img src="images/habilidades/magia.jpg" title="Magia" alt="Magia"/>
+							<span><%=jogo.magia%></span>
+						</div>
+					</div>
+				</div>
+	    	</div>
+			
+			<div class="row">
+				<div class="col-sm-3"></div>
+				<div class="col-sm-9">
+					<div class="acoes" id="acoes">Senhor, o que deseja fazer hoje?</div>					
+				</div>
+			</div>
+			
+		</div>	
+		
+		<div class="barra-inferior">
+			<div class="container">
+			
+				<div class="row">
+					<div class="col-sm-1">
+						<img src="images/outros/suditos.jpg" title="Suditos" alt="Aldeões" id="btn_suditos" /> <span><%=jogo.suditos%></span>
+					</div>
+					
+					<div class="col-sm-1">
+						<img src="images/outros/pergaminho.jpg" title="Pergaminhos" alt="Pergaminhos" id="btn_pergaminho"/>
+					</div>
+					
+					<div class="col-sm-8"></div>
+					
+					<div class="col-sm-2">
+						<img src="images/outros/moeda.jpg" title="Moedas" alt="Moeda"/>
+						<span><%=jogo.moeda%></span>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
